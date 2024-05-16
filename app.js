@@ -13,13 +13,75 @@ const formSubmitBtn = document.querySelector('.form_submit');
 const formSettingsCloseBtn = document.querySelector('.form_settings-closeBtn');
 const formFontItem = document.querySelectorAll('.form_font-item');
 const colorTextEl = document.querySelectorAll('.color_text');
-let colors = ['#f87070', 'rgb(112, 243, 248)','rgb(216, 129, 248)']
+
+let colors = ['#f87070', 'rgb(112, 243, 248)', 'rgb(216, 129, 248)']
 let fonts = ['"Kumbh Sans", sans-serif', '"Roboto Slab", serif', '"Space Mono", monospace'];
 let timers = [25, 5, 15]
 let timersTexts = ['25:00', '05:00', '15:00']
 let timerTime = timers[0] * 60;
 let min, sec;
 let selectedTimerIndex = 0;
+
+selectionTimer.forEach((selection, idx) => {
+    selection.addEventListener('click', () => {
+        selectionTimer.forEach((selected, index) => {
+            const selectedColorIndex = Array.from(colorTextEl).findIndex(item => item.innerHTML == '✓');
+            if (idx === index) {
+                selected.classList.add('timer_selected');
+                selectedTimerIndex = idx;
+                timerTime = timers[idx] * 60;
+                timerText.innerHTML = timersTexts[idx];
+                selected.style.backgroundColor = colors[selectedColorIndex]
+            } else {
+                selected.classList.remove('timer_selected');
+                selected.style.backgroundColor = ''
+            }
+        });
+        clearInterval(timerInterval);
+        timerRunning = false;
+        timerTxtBtn.innerHTML = 'Start';
+        timerDashOffset.style.strokeDashoffset = 0;
+        timerDashOffset.style.strokeDasharray = "1068";
+    });
+});
+
+function updateTimerDisplay() {
+    min = Math.floor(timerTime / 60);
+    sec = timerTime % 60;
+    let setTime = `${min < 10 ? 0 : ''}${min}:${sec < 10 ? 0 : ''}${sec}`
+    timerText.innerHTML = setTime;
+}
+let timerInterval;
+let timerRunning = false;
+function resetTimer() {
+    clearInterval(timerInterval);
+    timerRunning = false;
+    timerTxtBtn.innerHTML = 'Start';
+    timerTime = timers[selectedTimerIndex] * 60;
+    timerDashOffset.style.strokeDashoffset = 1068;
+}
+
+timerTxtBtn.addEventListener('click', () => {
+    if (!timerRunning) {
+        timerInterval = setInterval(() => {
+            if (timerTime > 0) {
+                timerTime--;
+                updateTimerDisplay();
+                let percentage = (timerTime / (timers[selectedTimerIndex] * 60)) * 100;
+                let dashArrayValue = (percentage / 100) * 1068;
+                timerDashOffset.style.strokeDashoffset = (1068 - dashArrayValue);
+            } else {
+                resetTimer();
+            }
+        }, 1000);
+        timerRunning = true;
+        timerTxtBtn.innerHTML = 'Stop';
+    } else {
+        clearInterval(timerInterval);
+        timerRunning = false;
+        timerTxtBtn.innerHTML = 'Start';
+    }
+});
 
 settingsBtn.addEventListener('click', () => {
     form.classList.add('active_form');
@@ -99,65 +161,4 @@ function increaseInputValue(arrow, input) {
 timeMinuteInput.forEach((input, idx) => {
     increaseInputValue(upArrow[idx], input);
     increaseInputValue(downArrow[idx], input);
-});
-
-selectionTimer.forEach((selection, idx) => {
-    selection.addEventListener('click', () => {
-        selectionTimer.forEach((selected, index) => {
-            const selectedColorIndex = Array.from(colorTextEl).findIndex(item => item.innerHTML == '✓');
-            if (idx === index) {
-                selected.classList.add('timer_selected');
-                selectedTimerIndex = idx;
-                timerTime = timers[idx] * 60;
-                timerText.innerHTML = timersTexts[idx];
-                selected.style.backgroundColor = colors[selectedColorIndex]
-            } else {
-                selected.classList.remove('timer_selected');
-                selected.style.backgroundColor = ''
-            }
-        });
-        clearInterval(timerInterval);
-        timerRunning = false;
-        timerTxtBtn.innerHTML = 'Start';
-        timerDashOffset.style.strokeDashoffset = 0;
-        timerDashOffset.style.strokeDasharray = "1068";
-    });
-});
-
-function updateTimerDisplay() {
-    min = Math.floor(timerTime / 60);
-    sec = timerTime % 60;
-    let setTime = `${min < 10 ? 0 : ''}${min}:${sec < 10 ? 0 : ''}${sec}`
-    timerText.innerHTML = setTime;
-}
-let timerInterval;
-let timerRunning = false;
-function resetTimer() {
-    clearInterval(timerInterval);
-    timerRunning = false;
-    timerTxtBtn.innerHTML = 'Start';
-    timerTime = timers[selectedTimerIndex] * 60;
-    timerDashOffset.style.strokeDashoffset = 1068;
-}
-
-timerTxtBtn.addEventListener('click', () => {
-    if (!timerRunning) {
-        timerInterval = setInterval(() => {
-            if (timerTime > 0) {
-                timerTime--;
-                updateTimerDisplay();
-                let percentage = (timerTime / (timers[selectedTimerIndex] * 60)) * 100;
-                let dashArrayValue = (percentage / 100) * 1068;
-                timerDashOffset.style.strokeDashoffset = (1068 - dashArrayValue);
-            } else {
-                resetTimer();
-            }
-        }, 1000);
-        timerRunning = true;
-        timerTxtBtn.innerHTML = 'Stop';
-    } else {
-        clearInterval(timerInterval);
-        timerRunning = false;
-        timerTxtBtn.innerHTML = 'Start';
-    }
 });
