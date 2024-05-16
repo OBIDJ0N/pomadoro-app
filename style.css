@@ -473,6 +473,9 @@ body {
     .timer_text-button {
         margin-top: 1rem;
     }
+    .outside_circle svg circle {
+        stroke-dasharray: 757 !important;
+    }
     .form {
         min-width: calc(-48px + 100vw)
     }
