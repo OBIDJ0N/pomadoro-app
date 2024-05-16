@@ -41,10 +41,17 @@ selectionTimer.forEach((selection, idx) => {
         timerRunning = false;
         timerTxtBtn.innerHTML = 'Start';
         timerDashOffset.style.strokeDashoffset = 0;
-        timerDashOffset.style.strokeDasharray = 1068;
+        timerDashOffset.style.strokeDasharray = getOffset();
     });
 });
-
+function getOffset() {
+    const width = window.innerWidth;
+    if(width >= 768) {
+        return 1068
+    } else {
+        return 757
+    }
+}
 function updateTimerDisplay() {
     min = Math.floor(timerTime / 60);
     sec = timerTime % 60;
@@ -58,7 +65,7 @@ function resetTimer() {
     timerRunning = false;
     timerTxtBtn.innerHTML = 'Start';
     timerTime = timers[selectedTimerIndex] * 60;
-    timerDashOffset.style.strokeDashoffset = 1068;
+    timerDashOffset.style.strokeDashoffset = getOffset();
 }
 
 timerTxtBtn.addEventListener('click', () => {
@@ -68,8 +75,8 @@ timerTxtBtn.addEventListener('click', () => {
                 timerTime--;
                 updateTimerDisplay();
                 let percentage = (timerTime / (timers[selectedTimerIndex] * 60)) * 100;
-                let dashArrayValue = (percentage / 100) * 1068;
-                timerDashOffset.style.strokeDashoffset = (1068 - dashArrayValue);
+                let dashArrayValue = (percentage / 100) * getOffset();
+                timerDashOffset.style.strokeDashoffset = (getOffset() - dashArrayValue);
             } else {
                 resetTimer();
             }
@@ -121,6 +128,11 @@ formSubmitBtn.addEventListener('click', (e) => {
             timerTxtBtn.style.color = ''
         })
     }
+    clearInterval(timerInterval);
+        timerRunning = false;
+        timerTxtBtn.innerHTML = 'Start';
+        timerDashOffset.style.strokeDashoffset = 0;
+        timerDashOffset.style.strokeDasharray = getOffset();
 });
 
 formFontItem.forEach((item, idx) => {

@@ -123,7 +123,7 @@ body {
     stroke: var(--color-light-red);
     stroke-width: 8;
     stroke-dashoffset: 0;
-    stroke-dasharray: 1068;
+    stroke-dasharray: 1068 !important;
 }
 .timer_text {
     position: relative;
