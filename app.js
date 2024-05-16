@@ -52,6 +52,12 @@ formSubmitBtn.addEventListener('click', (e) => {
         timerTxtBtn.style.fontFamily = fonts[selectedFontIndex];
         document.querySelector('.outside_circle svg circle').style.stroke = colors[selectedColorIndex];
         document.querySelector('.timer_selected').style.backgroundColor = colors[selectedColorIndex]
+        timerTxtBtn.addEventListener('mouseover', () => {
+            timerTxtBtn.style.color = colors[selectedColorIndex]
+        })
+        timerTxtBtn.addEventListener('mouseout', () => {
+            timerTxtBtn.style.color = ''
+        })
     }
 });
 
