@@ -41,7 +41,7 @@ selectionTimer.forEach((selection, idx) => {
         timerRunning = false;
         timerTxtBtn.innerHTML = 'Start';
         timerDashOffset.style.strokeDashoffset = 0;
-        timerDashOffset.style.strokeDasharray = "1068";
+        timerDashOffset.style.strokeDasharray = 1068;
     });
 });
 
